@@ -15,20 +15,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
         guard let scene = (scene as? UIWindowScene) else { return }
-        
         window = UIWindow(windowScene: scene)
-        let firstVC = ViewController()
-        let secondVC = SecondViewController()
-        let threeVC = ThreeViewController()
-        
-        let navOne = UINavigationController(rootViewController: firstVC)
-        let navTwo = UINavigationController(rootViewController: secondVC)
-        let navThree = UINavigationController(rootViewController: threeVC)
-        
-        let tabBar = UITabBarController()
-        tabBar.setViewControllers([navOne,navTwo,navThree], animated: true)
-        
-        window?.rootViewController = tabBar
+        window?.rootViewController = TabBarController()
         window?.makeKeyAndVisible()
     }
 

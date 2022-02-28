@@ -16,18 +16,18 @@ class TextReadViewController: UIViewController {
     //MARK: - Elements
     let mainTextView: UITextView = {
         let textView = UITextView()
-        textView.backgroundColor = UIColor(white: 0.5, alpha: 0.4)
+        textView.backgroundColor = Metric.textViewBackgroundColor
         textView.textAlignment = .center
         textView.text = exampleText
-        textView.font = UIFont.boldSystemFont(ofSize: 20)
+        textView.font = Metric.textViewFont
         return textView
     }()
     
     let sizeSlider: UISlider = {
         let slider = UISlider()
-        slider.value = 18.0
-        slider.minimumValue = 0
-        slider.maximumValue = 70
+        slider.value = Metric.sliderStartValue
+        slider.minimumValue = Metric.sliderMinimumValue
+        slider.maximumValue = Metric.sliderMaximumValue
         slider.addTarget(self, action: #selector(changeValue), for: .valueChanged)
         return slider
     }()
@@ -35,18 +35,11 @@ class TextReadViewController: UIViewController {
     let styleTextPickerView : UIPickerView = {
         let picker = UIPickerView()
         picker.tag = 0
-        picker.backgroundColor = UIColor(white: 0.65, alpha: 0.2)
-        picker.layer.cornerRadius = 20
-        picker.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: 25, height: 50))
+        picker.backgroundColor = Metric.pickerViewBackgroundColor
+        picker.layer.cornerRadius = Metric.cornerRadius
         return picker
     }()
     
-    let switcher: UISwitch = {
-        let switcher = UISwitch()
-        switcher.isOn = true
-        switcher.addTarget(self, action: #selector(changeSwitchStatus), for: .valueChanged)
-        return switcher
-    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,7 +61,6 @@ class TextReadViewController: UIViewController {
     private func setupHierarchy() {
         view.addSubview(mainTextView)
         view.addSubview(styleTextPickerView)
-        view.addSubview(switcher)
         view.addSubview(sizeSlider)
     }
     
@@ -91,32 +83,27 @@ class TextReadViewController: UIViewController {
     private func setupConstraints() {
         
         mainTextView.snp.makeConstraints { make in
-            make.top.equalTo(100)
-            make.left.equalTo(30)
-            make.right.equalTo(-30)
-            make.bottom.equalTo(-300)
+            make.topMargin.equalTo(Metric.topMargin)
+            make.left.equalTo(Metric.leftConstraints)
+            make.right.equalTo(Metric.rightConstraints)
+            make.height.equalTo(view.bounds.size.height / 2)
         }
         
         styleTextPickerView.snp.makeConstraints { make in
-            make.top.equalTo(mainTextView.snp.bottom).offset(20)
-            make.left.equalTo(30)
-            make.right.equalTo(-250)
-            make.bottom.equalTo(-200)
+            make.topMargin.equalTo(mainTextView.snp.bottom).offset(Metric.topMargin)
+            make.left.equalTo(Metric.leftConstraints)
+            make.height.equalTo(view.bounds.size.height / 4)
+            make.width.equalTo(view.bounds.size.width / 3)
+
         }
         
         sizeSlider.snp.makeConstraints { make in
-            make.left.equalTo(styleTextPickerView.snp.right).offset(20)
-            make.top.equalTo(mainTextView.snp.bottom).offset(20)
-            make.right.equalTo(-30)
-            make.bottom.equalTo(-200)
+            make.left.equalTo(styleTextPickerView.snp.right).offset(Metric.leftConstraints)
+            make.topMargin.equalTo(mainTextView.snp.bottom).offset(Metric.topMarginSlider)
+            make.right.equalTo(Metric.rightConstraints)
+
         }
         
-        switcher.snp.makeConstraints { make in
-            make.left.equalTo(30)
-            make.top.equalTo(styleTextPickerView.snp.bottom).offset(20)
-            make.bottom.equalTo(-100)
-            make.right.equalTo(-250)
-        }
     }
     //MARK: - Delegate and DataSource
     private func setupDelegateDatasource() {
@@ -138,23 +125,19 @@ class TextReadViewController: UIViewController {
             }
         }
     }
-    
-    //MARK: - Метод для свитчера
-    @objc func changeSwitchStatus (sender: UISwitch) {
-        if sender == switcher {
-            if sender.isOn {
-                DispatchQueue.main.async {
-                    self.view.overrideUserInterfaceStyle = .dark
-                    self.view.backgroundColor = .white
-                }
-                
-            } else {
-                DispatchQueue.main.async{
-                    self.view.overrideUserInterfaceStyle = .dark
-                    self.view.backgroundColor = .black
-                }
-            }
-        }
+
+    enum Metric {
+        static let textViewFont = UIFont.boldSystemFont(ofSize: 20)
+        static let sliderStartValue: Float = 18
+        static let pickerViewBackgroundColor = UIColor(white: 0.65, alpha: 0.2)
+        static let textViewBackgroundColor = UIColor(white: 0.5, alpha: 0.4)
+        static let sliderMinimumValue: Float = 0
+        static let sliderMaximumValue: Float = 70
+        static let topMargin: CGFloat = 20
+        static let topMarginSlider: CGFloat = 100
+        static let leftConstraints: CGFloat = 20
+        static let cornerRadius: CGFloat = 20
+        static let rightConstraints: CGFloat = -20
     }
     
 }

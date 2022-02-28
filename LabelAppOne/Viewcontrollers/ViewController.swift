@@ -8,47 +8,44 @@
 import UIKit
 import SnapKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     
     //MARK: - Elements
     let familesFont = UIFont.familyNames
     let systemColor = ["Черный","Синий","Красный","Зеленый","Серый"]
     var currentFont = ""
     let color = [UIColor.black, UIColor.systemBlue, UIColor.systemRed, UIColor.systemGreen, UIColor.gray]
-    var currentFontSize = Float(18.0)
+    var currentFontSize = Metric.sliderStartValue
     
     
     let myLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 35)
-        label.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: 200, height: 100))
-        label.text = "Alexander"
+        label.font = UIFont.boldSystemFont(ofSize: Metric.mainLabelBoldSystemFont)
+        label.text = Strings.welcome
         label.textAlignment = .center
         return label
     }()
     
     let textStyleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Стиль текста"
+        label.text = Strings.textStyleLabelTitle
         label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: 0, height: 25))
+        label.font = UIFont.boldSystemFont(ofSize: Metric.textStyleColorBoldSystemFont)
         return label
     }()
     
     let textColorLabel: UILabel = {
         let label = UILabel()
-        label.text = "Цвет текста"
+        label.text = Strings.textColorLabelTitle
         label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: 0, height: 25))
+        label.font = UIFont.boldSystemFont(ofSize: Metric.textStyleColorBoldSystemFont)
         return label
     }()
     
     lazy var styleColorTextStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [textStyleLabel,textColorLabel])
         stackView.axis = .horizontal
-        stackView.spacing = 50
+        stackView.spacing = Metric.spacingStackView
         stackView.distribution = .fillEqually
         return stackView
     }()
@@ -57,48 +54,47 @@ class ViewController: UIViewController {
     let styleTextPickerView : UIPickerView = {
         let picker = UIPickerView()
         picker.tag = 0
-        picker.backgroundColor = UIColor(white: 0.65, alpha: 0.2)
-        picker.layer.cornerRadius = 20
+        picker.backgroundColor = Metric.pickerViewBackgroundColor
+        picker.layer.cornerRadius = Metric.cornerRadius
         return picker
     }()
     
     let colorTextPickerView: UIPickerView = {
         let picker = UIPickerView()
         picker.tag  = 1
-        picker.backgroundColor = UIColor(white: 0.65, alpha: 0.2)
-        picker.layer.cornerRadius = 20
+        picker.backgroundColor = Metric.pickerViewBackgroundColor
+        picker.layer.cornerRadius = Metric.cornerRadius
         return picker
     }()
     
     lazy var styleColorPickerViewStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [styleTextPickerView,colorTextPickerView])
         stackView.axis = .horizontal
-        stackView.spacing = 50
+        stackView.spacing = Metric.spacingStackView
         stackView.distribution = .fillEqually
-        stackView.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: 0, height: 45))
         return stackView
     }()
     
     
     let labelSlider: UILabel = {
         let label = UILabel()
-        label.text = "Ты можешь поменять размер шрифта"
+        label.text = Strings.labelSliderText
         label.textAlignment = .center
         return label
     }()
     
     let sizeSlider: UISlider = {
         let slider = UISlider()
-        slider.value = 18.0
-        slider.minimumValue = 0
-        slider.maximumValue = 70
+        slider.value = Metric.sliderStartValue
+        slider.minimumValue = Metric.sliderMinimumValue
+        slider.maximumValue = Metric.sliderMaximumValue
         slider.addTarget(self, action: #selector(changeValue), for: .valueChanged)
         return slider
     }()
     
     let labelSwitcher: UILabel = {
         let label = UILabel()
-        label.text = "НАЖМИ 😉"
+        label.text = Strings.labelSliderText
         label.textAlignment = .center
         return label
     }()
@@ -110,13 +106,13 @@ class ViewController: UIViewController {
         return switcher
     }()
     
-    
     let imageView: UIImageView = {
         let imageView = UIImageView()
         let image = UIImage(named: "1")
         imageView.image = image
         imageView.contentMode = .scaleAspectFit
         imageView.isHidden = true
+        imageView.frame = CGRect(x: 0, y: 0, width: 0, height: 250)
         return imageView
     }()
     
@@ -146,68 +142,68 @@ class ViewController: UIViewController {
     private func setupTabBar() {
         var tabBar = UITabBarItem()
         tabBar = UITabBarItem(tabBarSystemItem: .search, tag: 0)
-        self.tabBarItem = tabBar
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .white
         tabBar.standardAppearance = appearance;
         tabBar.scrollEdgeAppearance = tabBar.standardAppearance
+        self.tabBarItem = tabBar
     }
     
     //MARK: - Constraints
     private func setupConstraints() {
         
         myLabel.snp.makeConstraints { make in
-            make.top.equalTo(100)
-            make.left.equalTo(30)
-            make.right.equalTo(-30)
-            make.height.equalTo(100)
+            make.topMargin.equalTo(Metric.topMarginMainLabel)
+            make.leadingMargin.equalTo(Metric.leftConstraints)
+            make.trailingMargin.equalTo(Metric.rightConstraints)
+            make.height.equalTo(view.bounds.size.width / 5)
         }
         
         styleColorTextStackView.snp.makeConstraints { make in
-            make.top.equalTo(myLabel.snp.bottom).offset(30)
-            make.left.equalTo(30)
-            make.right.equalTo(-30)
+            make.topMargin.equalTo(myLabel.snp.bottom).offset(Metric.topMarginMainLabel)
+            make.left.equalTo(Metric.leftConstraints)
+            make.right.equalTo(Metric.rightConstraints)
         }
         
         styleColorPickerViewStackView.snp.makeConstraints { make in
-            make.top.equalTo(styleColorTextStackView.snp.bottom).offset(30)
-            make.left.equalTo(30)
-            make.right.equalTo(-30)
+            make.topMargin.equalTo(styleColorTextStackView.snp.bottom).offset(Metric.topMarginMainLabel)
+            make.left.equalTo(Metric.leftConstraints)
+            make.right.equalTo(Metric.rightConstraints)
         }
         
         labelSlider.snp.makeConstraints { make in
             make.width.equalTo(sizeSlider.snp.width)
-            make.top.equalTo(styleColorPickerViewStackView.snp.bottom).offset(30)
+            make.topMargin.equalTo(styleColorPickerViewStackView.snp.bottom).offset(Metric.topMarginMainLabel)
             
-            make.left.equalTo(30)
-            make.right.equalTo(-30)
+            make.left.equalTo(Metric.leftConstraints)
+            make.right.equalTo(Metric.rightConstraints)
         }
         
         sizeSlider.snp.makeConstraints { make in
             make.width.equalTo(styleColorTextStackView.snp.width)
-            make.top.equalTo(labelSlider.snp.bottom).offset(15)
-            make.left.equalTo(30)
-            make.right.equalTo(-30)
+            make.topMargin.equalTo(labelSlider.snp.bottom).offset(Metric.topMarginMainLabel)
+            make.left.equalTo(Metric.leftConstraints)
+            make.right.equalTo(Metric.rightConstraints)
         }
         
         labelSwitcher.snp.makeConstraints { make in
             make.width.equalTo(styleColorTextStackView.snp.width)
-            make.top.equalTo(sizeSlider.snp.bottom).offset(30)
-            make.left.equalTo(30)
-            make.right.equalTo(-30)
+            make.topMargin.equalTo(sizeSlider.snp.bottom).offset(Metric.topMarginMainLabel)
+            make.left.equalTo(Metric.leftConstraints)
+            make.right.equalTo(Metric.rightConstraints)
         }
         
         switcher.snp.makeConstraints { make in
-            make.top.equalTo(labelSwitcher.snp.bottom).offset(15)
+            make.topMargin.equalTo(labelSwitcher.snp.bottom).offset(Metric.topMarginMainLabel)
             make.centerX.equalTo(view.snp.centerX)
         }
         
         imageView.snp.makeConstraints { make in
-            make.top.equalTo(100)
-            make.left.equalTo(20)
-            make.right.equalTo(-20)
-            make.bottom.equalTo(-600)
+            make.topMargin.equalTo(Metric.topMarginMainLabel)
+            make.leadingMargin.equalTo(Metric.leftConstraints)
+            make.trailingMargin.equalTo(Metric.rightConstraints)
+            make.height.equalTo(view.bounds.size.height / 3 )
         }
     }
     
@@ -260,5 +256,28 @@ class ViewController: UIViewController {
                 self.imageView.isHidden = true
             }
         }
+    }
+    
+    
+    enum Strings {
+        static let welcome = "Alexander"
+        static let textStyleLabelTitle = "Шрифт текста"
+        static let textColorLabelTitle = "Цвет текста"
+        static let labelSliderText = "Ты можешь поменять размер шрифта"
+        static let labelSwitcherText = "НАЖМИ 😉"
+    }
+    
+    enum Metric {
+        static let spacingStackView: CGFloat = 50
+        static let sliderStartValue: Float = 18
+        static let mainLabelBoldSystemFont: CGFloat = 25
+        static let textStyleColorBoldSystemFont: CGFloat = 18
+        static let cornerRadius: CGFloat = 20
+        static let pickerViewBackgroundColor = UIColor(white: 0.65, alpha: 0.2)
+        static let sliderMinimumValue: Float = 0
+        static let sliderMaximumValue: Float = 70
+        static let topMarginMainLabel: CGFloat = 20
+        static let leftConstraints: CGFloat = 20
+        static let rightConstraints: CGFloat = -20
     }
 }

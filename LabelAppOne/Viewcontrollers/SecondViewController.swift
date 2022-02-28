@@ -8,21 +8,20 @@
 import UIKit
 import SnapKit
 
-class SecondViewController: UIViewController {
+ final class SecondViewController: UIViewController {
     
     //MARK: - Elements
     let mainLabel: UILabel = {
         let label = UILabel()
-        label.text = "ДОБРО ПОЖАЛОВАТЬ"
-        label.font = UIFont.boldSystemFont(ofSize: 35)
-        label.numberOfLines = 0
+        label.text = Strings.welcome
+        label.font = UIFont.boldSystemFont(ofSize: Metric.boldSystemFont)
         label.textAlignment = .center
         return label
     }()
     
     let nameTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "введите логин"
+        textField.placeholder = Strings.placeHolderLoginTextfiled
         textField.textAlignment = .center
         textField.borderStyle = UITextField.BorderStyle.roundedRect
         textField.clearButtonMode = .whileEditing
@@ -31,7 +30,7 @@ class SecondViewController: UIViewController {
     
     let passwordTextField: UITextField = {
         let textField =  UITextField()
-        textField.placeholder = "введите пароль"
+        textField.placeholder = Strings.placeHolderPasswordTextfiled
         textField.textAlignment = .center
         textField.borderStyle = UITextField.BorderStyle.roundedRect
         textField.isSecureTextEntry = true
@@ -42,19 +41,18 @@ class SecondViewController: UIViewController {
     lazy var stackview: UIStackView = {
         let stackview = UIStackView(arrangedSubviews: [nameTextField,passwordTextField])
         stackview.axis = .vertical
-        stackview.spacing = 30
-        //stackview.backgroundColor = .systemGreen
-        //stackview.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: 250, height: 500))
+        stackview.spacing = Metric.spacingStackView
         stackview.distribution = .fillEqually
         return stackview
     }()
     
     let button: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("ВОЙТИ", for: .normal)
-        button.layer.cornerRadius = 5
-        button.backgroundColor = .systemGreen
-        button.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: 150, height: 30))
+        button.setTitle(Strings.labelButton, for: .normal)
+        button.layer.cornerRadius = Metric.cornerRadius
+        button.layer.borderWidth = Metric.borderWidth
+        button.titleLabel?.font = .boldSystemFont(ofSize: Metric.systemFont)
+        button.layer.borderColor = Metric.buttonBorderColor
         button.addTarget(self, action: #selector(changeVC), for: .touchUpInside)
         return button
     }()
@@ -67,7 +65,6 @@ class SecondViewController: UIViewController {
         setup()
         setupHierarchy()
         setupConstraints()
-        setupTabBar()
     }
     //MARK: - Hierarchy
     private func setupHierarchy() {
@@ -80,39 +77,26 @@ class SecondViewController: UIViewController {
     private func setupConstraints() {
         
         mainLabel.snp.makeConstraints { make in
-            make.top.equalTo(150)
-            make.right.equalTo(-40)
-            make.left.equalTo(40)
+            make.topMargin.equalTo(Metric.topMarginMainLabel)
+            make.right.equalTo(Metric.rightConstraints)
+            make.left.equalTo(Metric.leftConstraints)
+            make.height.equalTo(view.bounds.size.height / Metric.heightMainLabel)
         }
         
         stackview.snp.makeConstraints { make in
-            make.left.equalTo(20)
-            make.right.equalTo(-20)
-            make.top.equalTo(mainLabel.snp.bottom).offset(150)
-            make.bottom.equalTo(-400)
+            make.topMargin.equalTo(mainLabel.snp.bottom).offset(Metric.topMarginStackView)
+            make.left.equalTo(Metric.leftConstraints)
+            make.right.equalTo(Metric.rightConstraints)
         }
         
         button.snp.makeConstraints { make in
-            make.top.equalTo(stackview.snp.bottom).offset(100)
-            make.left.equalTo(100)
-            make.right.equalTo(-100)
+            make.topMargin.equalTo(stackview.snp.bottom).offset(Metric.topMarginButton)
+            make.left.equalTo(Metric.leftConstraints)
+            make.right.equalTo(Metric.rightConstraints)
+            make.height.equalTo(Metric.height)
         }
     }
     
-    
-    //MARK: - TabBar
-    private func setupTabBar() {
-        var tabBar = UITabBarItem()
-        tabBar = UITabBarItem(tabBarSystemItem: .mostViewed, tag: 2)
-        
-        let appearance = UITabBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .white
-        tabBar.standardAppearance = appearance;
-        tabBar.scrollEdgeAppearance = tabBar.standardAppearance
-        
-        self.tabBarItem = tabBar
-    }
     
     //MARK: - Setup View
     private func setup() {
@@ -147,6 +131,33 @@ extension SecondViewController : UITextFieldDelegate {
             self.passwordTextField.resignFirstResponder()
         }
         return true
+    }
+    
+    enum Strings {
+        static let welcome = "ДОБРО ПОЖАЛОВАТЬ"
+        static let placeHolderLoginTextfiled = "введите логин"
+        static let placeHolderPasswordTextfiled = "введите пароль"
+        static let labelButton = "ВОЙТИ"
+    }
+    
+    enum Metric {
+        static let spacingStackView: CGFloat = 30
+        static let cornerRadius: CGFloat = 30
+        static let boldSystemFont: CGFloat = 25
+        static let borderWidth: CGFloat = 3
+        static let systemFont: CGFloat = 16
+        
+        static let leftConstraints: CGFloat = 20
+        static let rightConstraints: CGFloat = -20
+        static let heightMainLabel: CGFloat = 8
+        
+        static let topMarginMainLabel: CGFloat = 30
+        static let topMarginStackView: CGFloat = 100
+        static let topMarginButton: CGFloat = 150
+        
+        static let height: CGFloat = 50
+        
+        static let buttonBorderColor = CGColor(red: 103.0/255.0, green: 140.0/255.0, blue: 242.0/255.0, alpha: 1.0)
     }
 
 }
